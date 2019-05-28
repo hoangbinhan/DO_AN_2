@@ -16,6 +16,7 @@ namespace DOAN_HQTCSDL
 {
     public partial class frmLogin : Form
     {
+        public static bool quyen = true;
         //chuỗi kết nối
         SqlConnection con = new SqlConnection(@"Data Source=(local);Initial Catalog=QuanLyLinhKienPC;Integrated Security=True");
 
@@ -73,6 +74,10 @@ namespace DOAN_HQTCSDL
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read() == true)
                     {
+                        if (userName == "admin")
+                            quyen = true;
+                        else
+                            quyen = false;
                         this.Hide();
                         Form main = new frmMain();
                         main.ShowDialog();

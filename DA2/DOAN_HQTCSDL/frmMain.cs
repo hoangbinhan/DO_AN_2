@@ -103,6 +103,25 @@ namespace DOAN_HQTCSDL
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            if (frmLogin.quyen == false)
+            {
+                btnThongKe.Enabled = false;
+                btnLoaiKhachHang.Enabled = false;
+                btnLoaiSP.Enabled = false;
+                btnNhanVien.Enabled = false;
+                btnNhaCungCap.Enabled = false;
+                btnTaiKhoan.Enabled = false;
+            }
+            else
+            {
+                btnThongKe.Enabled = true;
+                btnLoaiKhachHang.Enabled = true;
+                btnLoaiSP.Enabled = true;
+                btnNhanVien.Enabled = true;
+                btnNhaCungCap.Enabled = true;
+                btnTaiKhoan.Enabled = true;
+            }
+       
         }
         #region move form
         bool ismousedown = false; // Kiểm tra xem con trỏ chuột đã mousedown chưa

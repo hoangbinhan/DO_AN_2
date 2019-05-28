@@ -84,7 +84,7 @@ namespace DOAN_HQTCSDL
                 dt.Clear();
                 dt = dbNhanVien.SelectNhanVien().Tables[0];
                 cmbNhanVien.DataSource = dt;
-                cmbNhanVien.DisplayMember = "TenNV";
+                cmbNhanVien.DisplayMember = "HoTen";
                 cmbNhanVien.ValueMember = "MaNV";
             }
             catch (SqlException ex)
