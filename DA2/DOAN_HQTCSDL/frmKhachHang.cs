@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using BAL;
+using System.Text.RegularExpressions;
+
 namespace DOAN_HQTCSDL
 {
     public partial class frmKhachHang : Form
@@ -215,71 +217,101 @@ namespace DOAN_HQTCSDL
             LoadData();
         }
 
+        //check mail
+        public static bool isEmail(string inputEmail)
+        {
+            inputEmail = inputEmail ?? string.Empty;
+            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                  @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            Regex re = new Regex(strRegex);
+            if (re.IsMatch(inputEmail))
+                return (true);
+            else
+                return (false);
+        }
+
+        //check sdt
+        public static bool IsValidPhone(string value)
+        {
+            string pattern = @"^-*[0-9,\.?\-?\(?\)?\ ]+$";
+            return Regex.IsMatch(value, pattern);
+        }
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (them == true)
+            if (isEmail(txtEmail.Text) == false)
             {
-                bool f = false; // biến cờ
-                string err = "";
-                try
-                {
-                    string gioitinh;
-                    if (rdNam.Checked == true)
-                        gioitinh = "Nam";
-                    else
-                        gioitinh = "Nữ";
-                    //Thực hiện câu lệnh sql
-                    //Gọi Strored Procedure để Insert data
-                    f = dbKhachHang.InsertKhachHang(ref err, txtMaKH.Text, cmbLoaiKH.SelectedValue.ToString(),
-                        txtTenKH.Text,txtSDT.Text,txtDiaChi.Text,gioitinh.ToString(),txtEmail.Text
-                        );
-                    //Kiểm tra để thông báo
-                    if (f == true)
-                        MessageBox.Show("Thêm thành công!!!");
-                    else
-                        MessageBox.Show("Error:" + err);
-                }
-                catch (SqlException)
-                {
-                    MessageBox.Show("Thêm lỗi!!!", "Thông báo",
-                       MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                //Sau khi thêm xong Load lại data
-                LoadData();
-                //}
+                MessageBox.Show("Email không hợp lệ");
             }
-            else
+            else if (IsValidPhone(txtSDT.Text) == false)
             {
-                bool f = false; //biến cờ
-                string err = "";
-                try
+                MessageBox.Show("SDT không hợp lệ");
+            }
+            else {
+                if (them == true)
                 {
-                    string gioitinh;
-                    if (rdNam.Checked == true)
-                        gioitinh = "Nam";
-                    else
-                        gioitinh = "Nữ";
-                    //Thực hiện câu lệnh sql
-                    //Gọi Strored Procedure để Insert data
-                    f = dbKhachHang.UpdateKhachHang(ref err, txtMaKH.Text, cmbLoaiKH.SelectedValue.ToString(),
-                        txtTenKH.Text, txtSDT.Text, txtDiaChi.Text, gioitinh, txtEmail.Text
-                        );
+                    bool f = false; // biến cờ
+                    string err = "";
+                    try
+                    {
+                        string gioitinh;
+                        if (rdNam.Checked == true)
+                            gioitinh = "Nam";
+                        else
+                            gioitinh = "Nữ";
+                        //Thực hiện câu lệnh sql
+                        //Gọi Strored Procedure để Insert data
+                        f = dbKhachHang.InsertKhachHang(ref err, txtMaKH.Text, cmbLoaiKH.SelectedValue.ToString(),
+                            txtTenKH.Text, txtSDT.Text, txtDiaChi.Text, gioitinh.ToString(), txtEmail.Text
+                            );
+                        //Kiểm tra để thông báo
+                        if (f == true)
+                            MessageBox.Show("Thêm thành công!!!");
+                        else
+                            MessageBox.Show("Error:" + err);
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("Thêm lỗi!!!", "Thông báo",
+                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    //Sau khi thêm xong Load lại data
+                    LoadData();
+                    //}
+                }
+                else
+                {
+                    bool f = false; //biến cờ
+                    string err = "";
+                    try
+                    {
+                        string gioitinh;
+                        if (rdNam.Checked == true)
+                            gioitinh = "Nam";
+                        else
+                            gioitinh = "Nữ";
+                        //Thực hiện câu lệnh sql
+                        //Gọi Strored Procedure để Insert data
+                        f = dbKhachHang.UpdateKhachHang(ref err, txtMaKH.Text, cmbLoaiKH.SelectedValue.ToString(),
+                            txtTenKH.Text, txtSDT.Text, txtDiaChi.Text, gioitinh, txtEmail.Text
+                            );
 
-                    //Kiểm tra để thông báo
-                    if (f == true)
-                        MessageBox.Show("Sửa thông tin thành công!!!");
-                    else
-                        MessageBox.Show("Error:" + err);
+                        //Kiểm tra để thông báo
+                        if (f == true)
+                            MessageBox.Show("Sửa thông tin thành công!!!");
+                        else
+                            MessageBox.Show("Error:" + err);
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("Sửa thông tin lỗi!!!", "Thông báo",
+                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    //Sau khi thêm xong Load lại data
+                    LoadData();
                 }
-                catch (SqlException)
-                {
-                    MessageBox.Show("Sửa thông tin lỗi!!!", "Thông báo",
-                       MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                //Sau khi thêm xong Load lại data
-                LoadData();
-            }
-        }
+            } }
+                   
 
         private void btnThoat_Click(object sender, EventArgs e)
         {

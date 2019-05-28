@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using BAL;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace DOAN_HQTCSDL
 {
@@ -151,97 +152,111 @@ namespace DOAN_HQTCSDL
             LoadData();
         }
 
+        //check sdt
+        public static bool IsValidPhone(string value)
+        {
+            string pattern = @"^-*[0-9,\.?\-?\(?\)?\ ]+$";
+            return Regex.IsMatch(value, pattern);
+        }
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            if (them == true)
-            {
-                bool f = false; // biến cờ
-                string err = "";
-                byte[] picture = null;
-                try
-                {
-                    MemoryStream stream = null;
-                    try
-                    {
-                        stream = new MemoryStream();
-                        //pictureBoxNhaCC.Image.Save(stream, ImageFormat.Jpeg);
-                        PictureBoxNV.Image.Save(stream, PictureBoxNV.Image.RawFormat);
-                        //picture = stream.ToArray();
-                        picture = stream.GetBuffer();
-                        stream.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    //Thực hiện câu lệnh sql
-                    //Gọi Strored Procedure để Insert data
-                    string gioitinh;
-                    if (rdNam.Checked == true)
-                        gioitinh = "Nam";
-                    else
-                        gioitinh = "Nữ";
 
-                    f = dbNhanVien.InsertNhanVien(ref err, txtMaNV.Text, txtTenNV.Text, gioitinh, txtSDT.Text,txtDiaChi.Text,DateTimeNgaySinh.Value,picture);
-                    //Kiểm tra để thông báo
-                    if (f == true)
-                        MessageBox.Show("Thêm thành công!!!");
-                    else
-                        MessageBox.Show("Error:" + err);
-                }
-                catch (SqlException)
-                {
-                    MessageBox.Show("Thêm lỗi!!!", "Thông báo",
-                       MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                //Sau khi thêm xong Load lại data
-                LoadData();
-                //}
+            if (IsValidPhone(txtSDT.Text) == false)
+            {
+                MessageBox.Show("SDT không hợp lệ");
             }
             else
             {
-                byte[] picture = null;
-                bool f = false; //biến cờ
-                string err = "";
-                try
+                if (them == true)
                 {
-                    MemoryStream stream = null;
+                    bool f = false; // biến cờ
+                    string err = "";
+                    byte[] picture = null;
                     try
                     {
-                        stream = new MemoryStream();
-                        //pictureBoxNhaCC.Image.Save(stream, ImageFormat.Jpeg);
-                        PictureBoxNV.Image.Save(stream, PictureBoxNV.Image.RawFormat);
-                        //picture = stream.ToArray();
-                        picture = stream.GetBuffer();
-                        stream.Close();
+                        MemoryStream stream = null;
+                        try
+                        {
+                            stream = new MemoryStream();
+                            //pictureBoxNhaCC.Image.Save(stream, ImageFormat.Jpeg);
+                            PictureBoxNV.Image.Save(stream, PictureBoxNV.Image.RawFormat);
+                            //picture = stream.ToArray();
+                            picture = stream.GetBuffer();
+                            stream.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        //Thực hiện câu lệnh sql
+                        //Gọi Strored Procedure để Insert data
+                        string gioitinh;
+                        if (rdNam.Checked == true)
+                            gioitinh = "Nam";
+                        else
+                            gioitinh = "Nữ";
+
+                        f = dbNhanVien.InsertNhanVien(ref err, txtMaNV.Text, txtTenNV.Text, gioitinh, txtSDT.Text, txtDiaChi.Text, DateTimeNgaySinh.Value, picture);
+                        //Kiểm tra để thông báo
+                        if (f == true)
+                            MessageBox.Show("Thêm thành công!!!");
+                        else
+                            MessageBox.Show("Error:" + err);
                     }
-                    catch (Exception ex)
+                    catch (SqlException)
                     {
-                        MessageBox.Show(ex.Message);
+                        MessageBox.Show("Thêm lỗi!!!", "Thông báo",
+                           MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    //Thực hiện câu lệnh sql
-                    //Gọi Strored Procedure để Insert data
-                    string gioitinh;
-                    if (rdNam.Checked == true)
-                        gioitinh = "Nam";
-                    else
-                        gioitinh = "Nữ";
-
-                    f = dbNhanVien.UpdateNhanVien(ref err, txtMaNV.Text, txtTenNV.Text, gioitinh, txtSDT.Text, txtDiaChi.Text, DateTimeNgaySinh.Value, picture);
-
-                    //Kiểm tra để thông báo
-                    if (f == true)
-                        MessageBox.Show("Sửa thông tin thành công!!!");
-                    else
-                        MessageBox.Show("Error:" + err);
+                    //Sau khi thêm xong Load lại data
+                    LoadData();
+                    //}
                 }
-                catch (SqlException)
+                else
                 {
-                    MessageBox.Show("Sửa thông tin lỗi!!!", "Thông báo",
-                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    byte[] picture = null;
+                    bool f = false; //biến cờ
+                    string err = "";
+                    try
+                    {
+                        MemoryStream stream = null;
+                        try
+                        {
+                            stream = new MemoryStream();
+                            //pictureBoxNhaCC.Image.Save(stream, ImageFormat.Jpeg);
+                            PictureBoxNV.Image.Save(stream, PictureBoxNV.Image.RawFormat);
+                            //picture = stream.ToArray();
+                            picture = stream.GetBuffer();
+                            stream.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        //Thực hiện câu lệnh sql
+                        //Gọi Strored Procedure để Insert data
+                        string gioitinh;
+                        if (rdNam.Checked == true)
+                            gioitinh = "Nam";
+                        else
+                            gioitinh = "Nữ";
+
+                        f = dbNhanVien.UpdateNhanVien(ref err, txtMaNV.Text, txtTenNV.Text, gioitinh, txtSDT.Text, txtDiaChi.Text, DateTimeNgaySinh.Value, picture);
+
+                        //Kiểm tra để thông báo
+                        if (f == true)
+                            MessageBox.Show("Sửa thông tin thành công!!!");
+                        else
+                            MessageBox.Show("Error:" + err);
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("Sửa thông tin lỗi!!!", "Thông báo",
+                           MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    //Sau khi thêm xong Load lại data
+                    LoadData();
                 }
-                //Sau khi thêm xong Load lại data
-                LoadData();
             }
         }
 

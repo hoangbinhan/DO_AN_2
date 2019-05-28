@@ -99,8 +99,13 @@ namespace DOAN_HQTCSDL
                 //DataTable test = new DataTable();
                 //test=dbThongKe.DoanhThuTheoLSP(ref err, cmbchange.SelectedValue.ToString()).Tables[0];                                
                 tongtien = dbThongKe.DoanhThuTheoLSP(ref err, cmbchange.SelectedValue.ToString());
-                lblDoanhThu.Text=tongtien.ToString()+" VNĐ";
-               
+
+                lblDoanhThu.Text=tongtien.ToString();
+
+                System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+                decimal value = decimal.Parse(lblDoanhThu.Text, System.Globalization.NumberStyles.AllowThousands);
+                lblDoanhThu.Text = String.Format(culture, "{0:N0}", value)+" VNĐ";
+                
             }
             catch { }
         }
@@ -109,6 +114,8 @@ namespace DOAN_HQTCSDL
         {
             try
             {
+                int tongtien = 0;
+                
                 string err = "";
                 dbThongKe = new BLL_ThongKe();
                 dt = new DataTable();
@@ -116,9 +123,13 @@ namespace DOAN_HQTCSDL
                 dt = dbThongKe.getThongKeTheoThang(ref err, Convert.ToInt32(cmbchange.SelectedValue)).Tables[0];
                 dgvThongKe.DataSource = dt;
                 this.dgvThongKe.Columns["DonGia"].DefaultCellStyle.Format = "###,###,###,### VNĐ";
-                int tongtien = 0;
+                
                 tongtien = dbThongKe.DoanhThuTheoThang(ref err, Convert.ToInt32(cmbchange.SelectedValue));
-                lblDoanhThu.Text = tongtien.ToString() + " VNĐ";
+                lblDoanhThu.Text = tongtien.ToString() ;
+
+                System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+                decimal value = decimal.Parse(lblDoanhThu.Text, System.Globalization.NumberStyles.AllowThousands);
+                lblDoanhThu.Text = String.Format(culture, "{0:N0}", value) + " VNĐ";
             }
             catch { }
         }
@@ -190,7 +201,11 @@ namespace DOAN_HQTCSDL
                 //DataTable test = new DataTable();
                 //test = dbThongKe.DoanhThuTheoLSP(ref err, cmbchange.SelectedValue.ToString()).Tables[0];
                 tongtien = dbThongKe.TongDoanhThu(ref err);
-                lblDoanhThu.Text = tongtien.ToString() + " VNĐ";
+                lblDoanhThu.Text = tongtien.ToString() ;
+
+                System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+                decimal value = decimal.Parse(lblDoanhThu.Text, System.Globalization.NumberStyles.AllowThousands);
+                lblDoanhThu.Text = String.Format(culture, "{0:N0}", value) + " VNĐ";
             }
             catch { }
         }
@@ -204,6 +219,11 @@ namespace DOAN_HQTCSDL
         }
 
         private void cmbchange_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblDoanhThu_Click(object sender, EventArgs e)
         {
 
         }

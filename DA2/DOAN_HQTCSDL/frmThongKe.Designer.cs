@@ -130,6 +130,7 @@
             this.lblDoanhThu.Size = new System.Drawing.Size(60, 24);
             this.lblDoanhThu.TabIndex = 56;
             this.lblDoanhThu.Text = "label1";
+            this.lblDoanhThu.Click += new System.EventHandler(this.lblDoanhThu_Click);
             // 
             // groupBox1
             // 
